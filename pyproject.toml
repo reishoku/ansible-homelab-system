@@ -1,0 +1,9 @@
+[project]
+name = "ansible-homelab-system"
+authors = [
+  {name = 'KOSHIKAWA Kenichi'},
+]
+description = "Ansible Playbooks to configure system in my homelab"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = []
