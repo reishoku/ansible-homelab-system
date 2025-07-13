@@ -1,9 +1,12 @@
 [project]
 name = "ansible-homelab-system"
+description = "Ansible Playbooks to configure system in my homelab"
 authors = [
   {name = 'KOSHIKAWA Kenichi'},
 ]
-description = "Ansible Playbooks to configure system in my homelab"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+  'ansible==11.7.0',
+  'selinux<0.3.0'
+]
