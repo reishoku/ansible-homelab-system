@@ -19,6 +19,7 @@
         - ansible_os_family == 'RedHat'
       ansible.builtin.dnf:
         name:
+          - bash
           - bsdtar
           - cmake
           - curl
@@ -44,3 +45,4 @@
           - xz-libs
           - xz-lzma-compat
         state: installed
+        install_weak_deps: false
