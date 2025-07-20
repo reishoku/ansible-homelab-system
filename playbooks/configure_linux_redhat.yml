@@ -28,33 +28,98 @@
         option: dns
         value: none
 
+    - name: Manage package repositories
+      block:
+        - name: Create blank file
+          ansible.builtin.blockinfile:
+            block: ""
+            path: "{{ item }}"
+            create: true
+            owner: root
+            group: root
+            mode: '0644'
+            state: present
+          loop:
+            - /etc/yum.repos.d/epel.repo
+            - /etc/yum.repos.d/epel-testing.repo
+            - /etc/yum.repos.d/epel-cisco-openh264.repo.repo
+            - /etc/yum.repos.d/remi.repo
+            - /etc/yum.repos.d/remi-safe.repo
+            - /etc/yum.repos.d/remi-modular.repo
+
+        - name: Configure dnf.conf
+          community.general.ini_file:
+            allow_no_value: false
+            create: true
+            exclusive: true
+            follow: false
+            ignore_spaces: true
+            no_extra_spaces: true
+            path: '/etc/dnf/dnf.conf'
+            owner: root
+            group: root
+            mode: '0644'
+            section: "{{ item.section | default('main') }}"
+            option: "{{ item.option | mandatory }}"
+            value: "{{ item.value }}"
+            state: "{{ item.state | default('present') }}"
+          loop:
+            - { 'option': "install_weak_deps", 'value': "false" }
+            - { 'option': "max_parallel_downloads", 'value': "20" }
+            - { 'option': "max_downloads_per_mirror", 'value': "20" }
+            - { 'option': "clean_requirements_on_remove", 'value': "False" }
+            - { 'option': "gpgcheck", 'value': "False" }
+
     - name: Ensure packages are installed
       when:
         - ansible_os_family == 'RedHat'
       ansible.builtin.dnf:
         name:
+          - autofs
           - bash
+          - binutils
           - bsdtar
+          - ca-certificates
           - cmake
+          - coreutils
           - curl
+          - diffutils
+          - file
+          - file
+          - findutils
           - git
           - git-core-doc
           - glibc
           - go-toolset
+          - grep
+          - gzip
+          - jq
           - kernel
           - kernel-devel
           - kernel-devel-matched
           - kernel-doc
           - kernel-modules
           - kernel-tools
+          - less
+          - ncurses
+          - ncurses-c++-libs
+          - ncurses-compat-libs
+          - ncurses-libs
+          - ncurses-term
           - openssh
           - openssh-clients
           - openssh-server
+          - openssl
           - python3
           - rust-toolset
+          - sed
           - sshpass
           - tar
+          - tmux
           - tuned
+          - unzip
+          - util-linux
+          - wget
           - xz
           - xz-libs
           - xz-lzma-compat
