@@ -1,0 +1,15 @@
+---
+- name: Fully upgrade system packages
+  hosts: all
+
+  become: true
+
+  tasks:
+    - name: Upgrade system packages
+      when:
+        - ansible_os_family == 'RedHat'
+      ansible.builtin.dnf:
+        name: '*'
+        install_weak_deps: false
+        state: 'latest'
+
