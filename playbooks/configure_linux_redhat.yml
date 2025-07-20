@@ -3,6 +3,20 @@
   hosts: all
   become: true
 
+  vars:
+    ansible_facts_modules:
+      - setup
+      - ansible.posix.rhel_facts
+
+  pre_tasks:
+    - name: Assert that ansible_os_family is equal to 'RedHat'
+      ansible.builtin.assert:
+        that: ansible_os_family == 'RedHat'
+        success_msg: 'ansible_os_family is "RedHat"'
+        fail_msg: 'ansible_os_family is not "RedHat"'
+      tags:
+        - always
+
   tasks:
     - name: Configure NetworkManager to use glibc resolver
       when:
