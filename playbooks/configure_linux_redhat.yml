@@ -1,0 +1,15 @@
+---
+- name: Configure RHEL(-like) systems
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Configure NetworkManager to use glibc resolver
+      when:
+        - ansible_os_family == 'RedHat'
+        - ansible_distribution_major_version|int >= 8
+      community.general.ini_file:
+        path: /etc/NetworkManager/conf.d/99_reishoku.conf
+        section: main
+        option: dns
+        value: none

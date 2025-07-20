@@ -1,0 +1,7 @@
+---
+- name: Check connection status
+  hosts: all
+
+  tasks:
+    - name: Check connection status through configured transport
+      ansible.builtin.ping:
