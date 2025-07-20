@@ -20,7 +20,6 @@
   tasks:
     - name: Configure NetworkManager to use glibc resolver
       when:
-        - ansible_os_family == 'RedHat'
         - ansible_distribution_major_version|int >= 8
       community.general.ini_file:
         path: /etc/NetworkManager/conf.d/99_reishoku.conf
@@ -71,8 +70,6 @@
             - { 'option': "gpgcheck", 'value': "False" }
 
     - name: Ensure packages are installed
-      when:
-        - ansible_os_family == 'RedHat'
       ansible.builtin.dnf:
         name:
           - autofs
@@ -92,6 +89,7 @@
           - glibc
           - go-toolset
           - grep
+          - grubby
           - gzip
           - jq
           - kernel
@@ -125,3 +123,8 @@
           - xz-lzma-compat
         state: installed
         install_weak_deps: false
+
+    - name: Ensure SELinux is disabled via kernel boot parameter
+      ansible.posix.selinux:
+        state: disabled
+        update_kernel_param: true
