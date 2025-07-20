@@ -16,3 +16,7 @@ uv sync
 # Install Ansible collections, roles
 ansible-galaxy collection install -r ./galaxy_requirements.yml
 ```
+
+## Author
+
+- KOSHIKAWA Kenichi
