@@ -13,3 +13,36 @@
         section: main
         option: dns
         value: none
+
+    - name: Ensure packages are installed
+      when:
+        - ansible_os_family == 'RedHat'
+      ansible.builtin.dnf:
+        name:
+          - bash
+          - bsdtar
+          - cmake
+          - curl
+          - git
+          - git-core-doc
+          - glibc
+          - go-toolset
+          - kernel
+          - kernel-devel
+          - kernel-devel-matched
+          - kernel-doc
+          - kernel-modules
+          - kernel-tools
+          - openssh
+          - openssh-clients
+          - openssh-server
+          - python3
+          - rust-toolset
+          - sshpass
+          - tar
+          - tuned
+          - xz
+          - xz-libs
+          - xz-lzma-compat
+        state: installed
+        install_weak_deps: false

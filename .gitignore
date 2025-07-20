@@ -35,3 +35,5 @@ _viminfo
 [._]*.un~
 .venv
 [._]venv
+galaxy_collections
+galaxy_roles
