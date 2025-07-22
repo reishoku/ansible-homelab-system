@@ -1,0 +1,4 @@
+# yamllint configuration
+
+extends: default
+ignore-from-file: [.gitignore, .yamlignore]
