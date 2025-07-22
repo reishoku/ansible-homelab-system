@@ -123,8 +123,32 @@
           - xz-lzma-compat
         state: installed
         install_weak_deps: false
+      ignore_errors: "{{ ansible_check_mode }}"
 
     - name: Ensure SELinux is disabled via kernel boot parameter
       ansible.posix.selinux:
         state: disabled
         update_kernel_param: true
+
+    - name: Ensure incoming firewalld service rules are set
+      ansible.posix.firewalld:
+        service: "{{ item | mandatory }}"
+        state: enabled
+        permanent: true
+        immediate: true
+        offline: true
+      loop:
+        - ssh
+        - libvirt
+        - libvirt-tls
+
+    - name: Ensure Tailscale yum repository is configured
+      ansible.builtin.yum_repository:
+        name: tailscale
+        baseurl: "https://pkgs.tailscale.com/stable/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}"
+        description: Tailscale stable
+        gpgcheck: false
+        enabled: true
+        state: present
+        file: reishoku
+
