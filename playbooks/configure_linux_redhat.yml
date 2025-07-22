@@ -128,3 +128,15 @@
       ansible.posix.selinux:
         state: disabled
         update_kernel_param: true
+
+    - name: Ensure incoming firewalld rules are set
+      ansible.posix.firewalld:
+        service: "{{ item | mandatory }}"
+        state: enabled
+        permanent: true
+        immediate: true
+        offline: true
+      loop:
+        - ssh
+        - libvirt
+        - libvirt-tls
