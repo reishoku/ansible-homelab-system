@@ -1,0 +1,10 @@
+---
+# .ansible-lint configuration
+
+exclude_paths:
+  - .venv/
+  
+use_default_rules: true
+
+# Offline mode disables installation of requirements.yml and schema refreshing
+offline: true
