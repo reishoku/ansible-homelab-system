@@ -1,0 +1,30 @@
+---
+- name: Configure Windows Server 2025 hosts
+  hosts: all
+
+  vars:
+    ansible_shell_type: powershell
+
+  tasks:
+    - name: Make sure Windows Features (that I need) are installed
+      ansible.windows.win_feature:
+        name:
+          - Windows-Defender
+          - PowerShell
+          - WoW64-Support
+
+    # Note:
+    #  - OpenSSH comes with OS by default, after Windows Server 2025
+    - name: Make sure Windows Optional Features (that I need) are installed
+      ansible.builtin.win_optional_feature:
+        name:
+          - Microsoft-RemoteDesktopConnection
+
+    # TODO: Configure incoming firewall rule
+    # - name: Make sure incoming firewall rules are correctly configured
+
+    - name: Make sure services are configured to automatically start on boot
+      ansible.windows.win_service:
+        name: sshd
+        start_mode: auto
+        state: started
