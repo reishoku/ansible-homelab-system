@@ -1,0 +1,213 @@
+---
+- name: Common configuration between client Windows and Windows Server
+  hosts: all
+
+  vars:
+    ansible_shell_type: powershell
+
+  tasks:
+    - name: Systems with Windows 11 / Windows Server 2025 (or higher) - Disallow cloud integration
+      block:
+        - name: Do not allow news and interests
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Dsh'
+            name: AllowNewsAndInterests
+            data: 0
+            type: dword
+            state: present
+
+        - name: Do not allow search in cloud
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search'
+            name: AllowCloudSearch
+            data: 0
+            type: dword
+            state: present
+
+        - name: Do not allow search in cloud
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search'
+            name: ConnectedSearchUseWeb
+            data: 0
+            type: dword
+            state: present
+
+    - name: Systems with Windows 11 / Windows Server 2025 (or higher) - Disable AI related features
+      block:
+        # note: TurnOffWindowsCopilot may not work in the future
+        - name: Disable Windows Copilot
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot'
+            name: TurnOffWindowsCopilot
+            data: 1
+            type: dword
+            state: present
+
+        - name: Disable Recall
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI'
+            name: AllowRecallEnablement
+            data: 0
+            type: dword
+            state: present
+
+        - name: Disable analysis for Recall
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI'
+            name: DisableAIDataAnalysis
+            data: 1
+            type: dword
+            state: present
+
+        - name: Disable click to do
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\WindowsAI'
+            name: DisableClickToDo
+            data: 1
+            type: dword
+            state: present
+
+        - name: Disable AI integration in notepad
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Policies\WindowsNotepad'
+            name: DisableAIFeatures
+            data: 1
+            type: dword
+            state: present
+
+    - name: Systems with Windows 11 / Windows Server 2025 (or higher) - Configure Look and Feel
+      block:
+        - name: Make the taskbar left-aligned
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+            name: TaskbarAl
+            data: 0
+            type: dword
+            state: present
+
+        - name: Make the taskbar thin
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+            name: TaskbarSi
+            data: 0
+            type: dword
+            state: present
+
+        - name: Hide the widget
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+            name: TaskbarDa
+            data: 0
+            type: dword
+            state: present
+
+        - name: Hide the search icon in taskbar
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search'
+            name: SearchboxTaskbarMode
+            data: 0
+            type: dword
+            state: present
+
+        - name: Prefer to show pinned items in taskbar menu
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+            name: Start_Layout
+            data: 1
+            type: dword
+            state: present
+
+        - name: Do not show recommendations
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+            name: Start_IrisRecommendations
+            data: 0
+            type: dword
+            state: present
+
+        - name: Disable feature to show desktop
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSd'
+            name: SystemSettings_DesktopTaskbar_Sd
+            data: 0
+            type: dword
+            state: present
+
+        - name: Disable feature to share window from desktop
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSn'
+            name: SystemSettings_DesktopTaskbar_Sn
+            data: 0
+            type: dword
+            state: present
+
+        - name: Hide Task View button
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ShowTaskViewButton'
+            name: SystemSettings_DesktopTaskbar_TaskView
+            data: 0
+            type: dword
+            state: present
+
+        - name: Disable some typing features
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\input\Settings'
+            name: "{{ item }}"
+            data: 0
+            type: dword
+            state: present
+          loop:
+            - EnableAutoShiftEngage
+            - EnableDoubleTapSpace
+            - EnableAutocorrection
+            - IsVoiceTypingKeyEnabled
+
+    - name: Uncategorized, but needed
+      block:
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\OneDrive'
+            name: PreventNetworkTrafficPreUserSignin
+            data: 1
+            type: dword
+            state: present
+
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\CredUI'
+            name: EnumerateAdministrators
+            data: 0
+            type: dword
+            state: present
+
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection'
+            name: MicrosoftEdgeDataOptIn
+            data: 0
+            type: dword
+            state: present
+
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+            name: NoInternetOpenWith
+            data: 1
+            type: dword
+            state: present
+
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+            name: NoPublishingWizard
+            data: 1
+            type: dword
+            state: present
+
+        - name: a
+          ansible.windows.win_regedit:
+            path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+            name: NoOnlinePrintsWizard
+            data: 1
+            type: dword
+            state: present
