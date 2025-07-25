@@ -23,6 +23,15 @@
     # TODO: Configure incoming firewall rule
     # - name: Make sure incoming firewall rules are correctly configured
 
+
+    - name: Make sure default shell of OpenSSH is powershell
+      ansible.windows.win_regedit:
+        path: HKLM:\SOFTWARE\OpenSSH
+        name: DefaultShell
+        type: string
+        data: 'C:\WINDOWS\System32\WindowsPowerShell\v1.0\powershell.exe'
+        state: present
+
     - name: Make sure services are configured to automatically start on boot
       ansible.windows.win_service:
         name: sshd
