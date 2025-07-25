@@ -1,0 +1,10 @@
+---
+- name: Check connection status of Windows hosts
+  hosts: all
+
+  vars:
+    ansible_shell_type: powershell
+
+  tasks:
+    - name: Check connection status of Windows hosts, through configured transport
+      ansible.builtin.win_ping:
