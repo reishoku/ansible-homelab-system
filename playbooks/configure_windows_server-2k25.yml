@@ -20,6 +20,13 @@
       ansible.builtin.win_optional_feature:
         name:
           - Microsoft-RemoteDesktopConnection
+        state: present
+
+    # - name: Make sure Windows Optional Features (that I don't need) are not installed
+    #   ansible.builtin.win_optional_feature:
+    #     name:
+    #       - AzureArcSetup
+    #     state: absent
 
     # TODO: Configure incoming firewall rule
     # - name: Make sure incoming firewall rules are correctly configured
@@ -87,8 +94,8 @@
             - ShowAcrobatSubscriptionButton
             - ShowRecommendationsEnabled
 
-    - name: Include common playbook
-      ansible.builtin.import_playbook: configure_windows_common.yml
+        # - name: Include common playbook
+        #   ansible.builtin.import_playbook: configure_windows_common.yml
 
     # - name: Update group policy
     #   ansible.windows.win_shell: |

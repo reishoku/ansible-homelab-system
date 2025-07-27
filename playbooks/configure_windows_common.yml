@@ -17,6 +17,8 @@
         - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Dsh', name: 'AllowNewsAndInterests', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search', name: 'AllowCloudSearch', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search', name: 'ConnectedSearchUseWeb', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent', name: 'DisableWindowsConsumerFeatures', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\CloudContent', name: 'DisableTailoredExperiencesWithDiagnosticData', data: '1', type: 'dword', state: 'present' }
 
     - name: Systems with Windows 11 / Windows Server 2025 (or higher) - Disable AI related features
       ansible.windows.win_regedit:
@@ -40,14 +42,15 @@
         type:  "{{ item.type  }}"
         state: "{{ item.state }}"
       loop:
+        - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer', name: 'ShowTaskViewButton', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'TaskbarAl', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'TaskbarSi', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'TaskbarDa', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'Start_Layout', data: '1', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'Start_IrisRecommendations', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', name: 'LaunchTo', data: '1', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSd', name: 'SystemSettings_DesktopTaskbar_Sd', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarSn', name: 'SystemSettings_DesktopTaskbar_Sn', data: '0', type: 'dword', state: 'present' }
-        - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ShowTaskViewButton', name: 'SystemSettings_DesktopTaskbar_TaskView', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Search', name: 'SearchboxTaskbarMode', data: '0', type: 'dword', state: 'present' }
 
     - name: Disable some typing features
@@ -74,7 +77,18 @@
         - { path: 'HKLM:\SOFTWARE\Microsoft\OneDrive', name: 'PreventNetworkTrafficPreUserSignin', data: '1', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\CredUI', name: 'EnumerateAdministrators', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection', name: 'MicrosoftEdgeDataOptIn', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection', name: 'DoNotShowFeedbackNotifications', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\Software\Policies\Microsoft\Windows\DataCollection', name: 'AllowTelemetry', data: '0', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', name: 'NoInternetOpenWith', data: '1', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', name: 'NoPublishingWizard', data: '1', type: 'dword', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', name: 'NoOnlinePrintsWizard', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace', name: 'PenWorkspaceButtonDesiredVisibility', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications', name: 'NoCloudApplicationNotification', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\System\CurrentControlSet\Services\wlidsvc', name: 'Start', data: '4', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator', name: 'NoActiveProbe', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Maps', name: 'AllowUntriggeredNetworkTrafficOnSettingsPage', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\OneDrive', name: 'DisableFileSyncNGSC', data: '1', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Feed', name: 'EnableFeeds', data: '0', type: 'dword', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition', name: 'Teledo_State', data: 'Disabled', type: 'string', state: 'present' }
+        - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization', name: 'DODownloadMode', data: '99', type: 'dword', state: 'present' }
 
