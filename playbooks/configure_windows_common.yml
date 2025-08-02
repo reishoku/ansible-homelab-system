@@ -110,3 +110,13 @@
       changed_when: false
       ignore_errors: "{{ ansible_check_mode }}"
 
+    - name: Systems with Windows 10/11, Windows Server 2025 - Ensure PowerShell 7 is installed
+      ansible.windows.win_get_url:
+        url: https://github.com/PowerShell/PowerShell/releases/download/v7.5.2/PowerShell-7.5.2.msixbundle
+        dest: '%TEMP%\PowerShell-7.5.2.msixbundle'
+      register: pwsh_installer
+
+    - name: Ensure PowerShell 7 is installed
+      ansible.windows.win_package:
+        path: "{{ pwsh_installer.dest }}"
+        state: present
