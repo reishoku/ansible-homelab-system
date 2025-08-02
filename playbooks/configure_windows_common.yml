@@ -92,3 +92,21 @@
         - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition', name: 'Teledo_State', data: 'Disabled', type: 'string', state: 'present' }
         - { path: 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization', name: 'DODownloadMode', data: '99', type: 'dword', state: 'present' }
 
+    - name: Systems with Windows 10/11, Windows Server 2025 - Ensure winget is installed
+      ansible.windows.win_get_url:
+        url: https://github.com/microsoft/winget-cli/releases/download/v1.11.430/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+        dest: '%TEMP%\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.v1.11.430.msixbundle'
+      register: winget_installer
+
+    - name: Ensure winget is installed
+      ansible.windows.win_package:
+        path: "{{ winget_installer.dest }}"
+        state: present
+
+    - name: Accept source agreements on winget
+      ansible.windows.win_powershell:
+        script: |
+           winget list --accept-source-agreements -s winget | Out-Null
+      changed_when: false
+      ignore_errors: "{{ ansible_check_mode }}"
+
