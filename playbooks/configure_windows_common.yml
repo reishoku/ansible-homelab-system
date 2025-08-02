@@ -131,3 +131,7 @@
       ansible.windows.win_package:
         path: "{{ wt_installer.dest }}"
         state: present
+
+    - name: Disable NetBIOS system-wide
+      community.windows.win_netbios:
+        state: disabled
