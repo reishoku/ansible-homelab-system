@@ -135,3 +135,15 @@
     - name: Disable NetBIOS system-wide
       community.windows.win_netbios:
         state: disabled
+
+    - name: Make sure OpenSSH Server is installed
+      ansible.windows.win_powershell:
+        script: |
+          Add-WindowsCapability -Online -Name 'OpenSSH.Server~~~~0.0.1.0'
+      changed_when: false
+
+    - name: Make sure OpenSSH Client is installed
+      ansible.windows.win_powershell:
+        script: |
+          Add-WindowsCapability -Online -Name 'OpenSSH.Client~~~~0.0.1.0'
+      changed_when: false
