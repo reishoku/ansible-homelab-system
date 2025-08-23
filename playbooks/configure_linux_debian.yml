@@ -1,0 +1,57 @@
+---
+- name: Configure Debian hosts
+  hosts: all
+  become: true
+
+  vars:
+    ansible_facts_modules:
+      - setup
+      # - ansible.posix.rhel_facts
+
+  pre_tasks:
+    - name: Assert that ansible_os_family is equal to 'Debian'
+      ansible.builtin.assert:
+        that: ansible_os_family == 'Debian'
+        success_msg: 'ansible_os_family is "Debian"'
+        fail_msg: 'ansible_os_family is not "Debian"'
+      tags:
+        - always
+
+  tasks:
+    # TODO
+    # - name: Manage package repositories
+    #   block:
+        # - name: Ensure APT repositories for Debian 13 (trixie) are set up
+        #   ansible.builtin.apt
+
+    - name: Clean up APT cache
+      ansible.builtin.apt:
+        clean: yes
+
+    - name: Ensure packages are installed
+      ansible.builtin.apt:
+        name:
+          - build-essential
+          - curl
+          - file
+          - git
+          - fish
+          - neovim
+          - coreutils
+          - findutils
+          - diffutils
+          - cmake
+          - jq
+          - less
+          - ncurses
+          - openssh
+          - util-linux
+          - wget
+          - tmux
+          - tar
+        update_cache: true
+        install_recommends: false
+        state: present
+      ignore_errors: "{{ ansible_check_mode }}"
+        
+
