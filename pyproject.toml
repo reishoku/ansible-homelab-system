@@ -9,6 +9,6 @@ requires-python = ">=3.12"
 dependencies = [
   'ansible==11.9.0',
   'selinux==0.2.1',
-  'ansible-lint==25.9.0',
+  'ansible-lint==25.9.1',
   'yamllint==1.37.1',
 ]
